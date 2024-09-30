@@ -1,0 +1,56 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    background-color: #121212;
+}
+
+.navbar {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #282828;
+    padding: 1rem;
+}
+
+.logo{
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1db954;
+    background-color: #282828;
+}
+
+.search{
+    width: 300px;
+    padding: 1rem;
+    border-radius: 2.5rem;
+    border: none;
+    background-color: white;
+}
+
+.playlist{
+    padding: 2.5rem;
+}
+
+.song{
+    margin: 0.5rem 0;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-bottom: 1px solid #333;
+    transition: background-color 0.15s;
+}
+
+.song:hover{
+    background-color: #1db954;
+}
+
+.song-ul li{
+    display: flex;
+    align-items: center;
+}
+
+.song-ul li figure img{
+    width: 4rem;
+    aspect-ratio: 1/1;
+}

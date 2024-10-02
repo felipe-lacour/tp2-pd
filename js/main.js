@@ -214,3 +214,4 @@ const loadSong = (index) => {
     bar.classList.add('barra')
     main.appendChild(bar);
 }
+

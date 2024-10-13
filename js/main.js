@@ -38,6 +38,11 @@ class Header extends HTMLElement {
         input.classList.add("search")
         input.placeholder = "Search..."
 
+        input.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            filterPlaylist(searchTerm);
+        })
+
         header.appendChild(heading);
         header.append(input)
 
@@ -52,7 +57,7 @@ class PlaylistSection extends HTMLElement{
         const container = document.createElement('section')
         container.classList.add('playlist')
         const title = document.createElement('h2')
-        title.innerText = this.getAttribute('title') || 'Default Title';
+        title.innerText = this.getAttribute('title') || 'Default playlist';
         
         if(songs.length){
             const ul = document.createElement('ul')
@@ -185,11 +190,10 @@ class PlayBar extends HTMLElement {
         });
 
         controls.append(prev, play, next);
-        container.append(img, title, progressBar, timeDisplay, controls ); // Add the slider and time display
+        container.append(img, title, controls , progressBar, timeDisplay); // Add the slider and time display
         this.appendChild(container); 
     }
 }
-
 
 
 customElements.define('custom-header', Header);
@@ -215,3 +219,16 @@ const loadSong = (index) => {
     main.appendChild(bar);
 }
 
+const filterPlaylist = (searchTerm) => {
+    const songElements = document.querySelectorAll('.song');
+    songs.forEach((song, index) => {
+        const songName = song.name.toLowerCase();
+        const songElement = songElements[index];
+
+        if (songName.includes(searchTerm)) {
+            songElement.style.display = "flex";
+        } else {
+            songElement.style.display = "none";
+        }
+    });
+};

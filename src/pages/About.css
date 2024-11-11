@@ -1,0 +1,98 @@
+.banners h1 {
+    font-size: 60px;
+    margin-inline: 10%;
+}
+
+.img1 {
+    max-width: 575px;
+}
+
+.img2 {
+    max-width: 275px;
+    width: 100%;
+    height: auto;
+}
+
+.img3 {
+    max-width: 575px;
+}
+
+.txtnimg article{
+    display: flex;
+    gap: 5rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5rem;
+}
+
+.disc{
+    position: relative;
+    width: 300px; /* Adjust to your desired size */
+    height: auto; /* or set a specific height */
+}
+
+.background {
+    width: 100%; /* Ensure the background image fills the container */
+    height: auto;
+}
+
+.botonn {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 48%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust position to the center */
+    width: 50%; /* Set overlay image size as needed */
+    height: auto;
+}
+
+.txtnimg {
+    margin-top: 5rem;
+}
+
+.card {
+    background-color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ffffff;
+    color: white;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1 1 200px;
+}
+
+.card-header, .card-footer {
+    background-color: rgb(0, 128, 73);
+    padding: 1rem;
+    text-decoration: none;
+    color:  #ffffff;
+}
+
+.card-footer {
+    text-align: center;
+}
+
+.card-footer:hover {
+    background-color: rgb(33, 131, 88);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.plans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.plans-zone {
+    padding-inline: 5rem;
+    padding-top: 3rem;
+    padding-bottom: 8rem;
+}
+
+.plans-title {
+    padding-inline: 5rem;
+}

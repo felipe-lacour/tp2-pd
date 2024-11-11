@@ -1,0 +1,37 @@
+.sent-page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+}
+
+.sent-page h2{
+  font-size: 3rem;
+}
+
+.info-sub{
+  font-size: 1.5rem;
+}
+
+.sent-page div{
+  background-color: rgb(216, 216, 216);
+  border-radius: 1rem;
+  width: 50%;
+}
+
+.sent-page div p{
+  color: black;
+  border: 1px solid rgb(33, 33, 33);
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  text-align: left;
+}
+.message{
+  border: 0 !important;
+}
+

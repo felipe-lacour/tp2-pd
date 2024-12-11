@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { SongPlayContext } from '../context/SongPlayContext';
 
-const Header = ({ searchTerm, setSearchTerm }) => {
+const Header = () => {
+    const {handleSearch, searchTerm} = useContext(SongPlayContext);
     const location = useLocation();
-
-    const handleSearch = (event) => {
-        setSearchTerm(event.target.value.toLowerCase());
-    };
 
     return (
         <header className="navbar">

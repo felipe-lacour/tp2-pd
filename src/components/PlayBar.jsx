@@ -9,79 +9,18 @@ const formatTime = (seconds) => {
 };
 
 const PlayBar = () => {
-	
-	const { handleNextSong, handlePreviousSong, playlist, currentSongIndex} = useContext(SongPlayContext)
-	let song = currentSongIndex !== null ? playlist[currentSongIndex] : null;
-	const [isPlaying, setIsPlaying] = useState(true);
-	const [progress, setProgress] = useState(0);
-	const audioRef = useRef(new Audio(song.song));
-	const [currentTime, setCurrentTime] = useState(0);
-	const [duration, setDuration] = useState(0);
-console.log(currentSongIndex)
-	const handleSongEnd = useCallback(() => {
-		handleNextSong();
-	}, [handleNextSong]);
+	const { 
+		handleNextSong, 
+		handlePreviousSong, 
+		song, 
+		currentTime, 
+		handleProgressClick, 
+		progress, 
+		duration, 
+		togglePlay, 
+		isPlaying
+	} = useContext(SongPlayContext)
 
-	useEffect(() => {
-		const audioElement = audioRef.current;
-
-		audioElement.src = song.data.song;
-		audioElement.load();
-	
-		const handlePlay = async () => {
-			await audioElement.play();
-			setIsPlaying(true);
-		};
-	
-		const handleLoadedData = () => {
-			handlePlay();
-			setDuration(audioRef.current.duration);
-		};
-
-		audioElement.addEventListener('loadeddata', handleLoadedData);
-
-		return () => {
-			audioElement.removeEventListener('loadeddata', handleLoadedData);
-			audioElement.pause();
-		};
-	}, [song]);
-
-	useEffect(() => {
-		const audioElement = audioRef.current;
-
-		const handleTimeUpdate = () => {
-			setCurrentTime(audioElement.currentTime);
-			setProgress((audioElement.currentTime / audioElement.duration) * 100);
-		};
-
-		audioElement.addEventListener('timeupdate', handleTimeUpdate);
-		audioElement.addEventListener('ended', handleSongEnd);
-
-		return () => {
-			audioElement.removeEventListener('timeupdate', handleTimeUpdate);
-			audioElement.removeEventListener('ended', handleSongEnd);
-		};
-	}, [handleSongEnd]);
-
-	const togglePlay = () => {
-		const audioElement = audioRef.current;
-		if (isPlaying) {
-		audioElement.pause();
-		} else {
-		audioElement.play().catch((error) => {
-			console.error("Error playing the audio:", error);
-		});
-		}
-		setIsPlaying(!isPlaying);
-	};
-
-	const handleProgressClick = (event) => {
-		const progressBar = event.currentTarget;
-		const clickPosition = event.nativeEvent.offsetX;
-		const progressWidth = progressBar.offsetWidth;
-		const newTime = (clickPosition / progressWidth) * audioRef.current.duration;
-		audioRef.current.currentTime = newTime;
-	};
 
 	return (
 		<div className="barra">

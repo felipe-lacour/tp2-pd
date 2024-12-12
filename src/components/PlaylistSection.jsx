@@ -7,7 +7,6 @@ const PlaylistSection = () => {
     const filteredPlaylist = playlist.filter(song =>
         song.name && song.name.toLowerCase().includes(searchTerm || "")
     );
-    console.log(filteredPlaylist)
     return (
         playlist.length ? (
             <section className="playlist">
@@ -22,7 +21,7 @@ const PlaylistSection = () => {
                     </li>
                 ))}
             </ul>
-            {currentSongIndex? <PlayBar/> : ''}
+            {currentSongIndex !== null ? <PlayBar/> : ''}
             
         </section>
         ) : ('')

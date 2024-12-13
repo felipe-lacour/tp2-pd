@@ -6,18 +6,17 @@ import UserPlaylistsSidebar from './UserPlaylistsSidebar';
 import { SongItem } from './SongItem';
 
 const PlaylistSection = () => {
-    const { playlist, searchTerm, currentSongIndex, selectedPlaylist } = useContext(SongPlayContext);
-    const filteredPlaylist = playlist.filter(song =>
+    const { playlist, searchTerm, currentSongIndex, selectedPlaylist, playlistName } = useContext(SongPlayContext);
+    const filteredPlaylist = playlist?.filter(song =>
         song.data.name && song.data.name.toLowerCase().includes(searchTerm || "")
     );
-
     return (
         <div className="playlist-container" style={{ display: 'flex' }}>
             <UserPlaylistsSidebar />
             
-            {playlist.length > 0 && (
+            {playlist?.length > 0 && (
                 <section className="playlist">
-                    <h2>Player</h2>
+                    <h2>{playlistName !== null ? playlistName : "Home"}</h2>
                     <ul className="song-ul">
                         {selectedPlaylist? (
                             selectedPlaylist.map((song, index) => <SongItem song={song} index={index} key={song.id}/>)

@@ -41,7 +41,7 @@ const UserPlaylistsSidebar = () => {
         <ul>
           <li onClick={() => handlePlaylistSelect(null)}>Home</li>
           {userPlaylists.map((pl) => (
-            <li key={pl.id} onClick={() => handlePlaylistSelect(pl.id)}>{pl.data.name}</li>
+            <li key={pl.id} onClick={() => handlePlaylistSelect(pl)}>{pl.data.name}</li>
           ))}
         </ul>
       ) : (

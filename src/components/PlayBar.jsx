@@ -12,7 +12,6 @@ const PlayBar = () => {
 		isPlaying
 	} = useContext(SongPlayContext)
 
-
 	return (
 		<div className="barra">
 		<img src={song.data.img} alt="Current Song" className="img-barra" />

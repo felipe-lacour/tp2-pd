@@ -9,7 +9,7 @@ const PlAddPopUp = ({song}) => {
             {userPlaylists.map(item => {
                 return <li key={item.id} onClick={(event) => {
                     event.stopPropagation()
-                    handleAddToPlayList(song.id, item)
+                    handleAddToPlayList(song, item)
                 }}>{item.data.name}</li>
             })}
         </ul>

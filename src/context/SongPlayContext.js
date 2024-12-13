@@ -2,17 +2,7 @@ import { createContext, useState, useEffect, useRef, useContext } from "react";
 import { UserContext } from "./UserContext";
 import { useSongs } from "../customHooks/useSongs";
 import { usePlaylists } from "../customHooks/usePlaylists";
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import { 
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-  documentId ,
-  updateDoc,
-  arrayUnion
-} from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, documentId, updateDoc, arrayUnion } from "firebase/firestore";
 
 const SongPlayContext = createContext();
 
@@ -23,57 +13,61 @@ const SongPlayContextProvider = ({ children }) => {
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [playlist, setPlaylist] = useState([]);
+  const [playlist, setPlaylist] = useState([]); // Nunca null
   const [currentSongIndex, setCurrentSongIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const newSongs = useSongs();
+  const newSongs = useSongs(); 
   const audioRef = useRef(new Audio());
-  const [userPlaylists, setUserPlaylists] = useState(null)
-  const [isLoadingPlaylists, setIsLoadingPlaylist] = useState(true)
-  const [selectedPlaylist, setSelectedPlaylist] = useState(null)
+  const [userPlaylists, setUserPlaylists] = useState(null);
+  const [isLoadingPlaylists, setIsLoadingPlaylist] = useState(true);
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [playlistName, setPlaylistName] = useState(null)
   const newUserPlaylists = usePlaylists(user?.id);
 
   const songSet = () => {
-    if(currentSongIndex !== null){
-      if(selectedPlaylist){
-        return selectedPlaylist[currentSongIndex]
-      } 
+    const playlistAux = (selectedPlaylist && selectedPlaylist.length > 0) ? selectedPlaylist : playlist;
 
-      return playlist[currentSongIndex]
-    } else return null
-  }
+    if (
+      currentSongIndex !== null &&
+      Array.isArray(playlistAux) && 
+      playlistAux.length > 0 && 
+      playlistAux[currentSongIndex]
+    ) {
+      return playlistAux[currentSongIndex];
+    }
+    return null;
+  };
 
   const song = songSet();
-
-
 
   useEffect(() => {
     if (newUserPlaylists === null) {
       setIsLoadingPlaylist(true);
     } else {
       setUserPlaylists(newUserPlaylists);
+      console.log('User Playlists', userPlaylists)
       setIsLoadingPlaylist(false);
     }
   }, [newUserPlaylists]);
 
+  // Actualiza playlist solo si newSongs es válido (array con datos)
   useEffect(() => {
-    setPlaylist(newSongs);
+    if (Array.isArray(newSongs) && newSongs.length > 0) {
+      setPlaylist(newSongs);
+    }
   }, [newSongs]);
 
-  // Cambiar canción cuando cambia currentSongIndex (NOTA: NO agregues `isPlaying` aquí)
   useEffect(() => {
     if (!song) return;
-  
     const audioElement = audioRef.current;
     audioElement.src = song.data.song;
     audioElement.load();
-  
+
     const handleLoadedData = () => {
       setDuration(audioElement.duration || 0);
       setCurrentTime(audioElement.currentTime || 0);
       setProgress((audioElement.currentTime / audioElement.duration) * 100 || 0);
 
-      // Si ya estamos en estado "isPlaying", forzamos la reproducción aquí
       if (isPlaying) {
         audioElement.play().catch((error) => {
           console.error("Error al reproducir el audio tras load:", error);
@@ -86,9 +80,8 @@ const SongPlayContextProvider = ({ children }) => {
     return () => {
       audioElement.removeEventListener("loadeddata", handleLoadedData);
     };
-  }, [song]); // <-- Sólo depende de 'song'
+  }, [song]);
 
-  // Controlar reproducción según isPlaying
   useEffect(() => {
     const audioElement = audioRef.current;
     if (isPlaying) {
@@ -109,6 +102,8 @@ const SongPlayContextProvider = ({ children }) => {
     };
 
     const handleEnded = () => {
+      // Antes de cambiar la canción, verifica playlist
+      console.log("Canción terminada. Playlist actual:", playlist, "Selected:", selectedPlaylist);
       handleNextSong();
     };
 
@@ -119,21 +114,44 @@ const SongPlayContextProvider = ({ children }) => {
       audioElement.removeEventListener("timeupdate", handleTimeUpdate);
       audioElement.removeEventListener("ended", handleEnded);
     };
-  }, []);
+  }, [playlist, selectedPlaylist]);
 
   const togglePlay = () => {
     setIsPlaying((prev) => !prev);
   };
 
   const handleNextSong = () => {
-    const playlistAux = selectedPlaylist ? selectedPlaylist : playlist
-    setCurrentSongIndex((prevIndex) => (prevIndex + 1) % playlistAux.length);
+    const playlistAux = (selectedPlaylist && selectedPlaylist.length > 0) ? selectedPlaylist : playlist;
+    
+    if (!Array.isArray(playlistAux) || playlistAux.length === 0) {
+        console.warn("La playlist está vacía o no es un array.");
+        setIsPlaying(false);
+        return;
+    }
+
+    setCurrentSongIndex((prevIndex) => {
+      // Si prevIndex es null, comienza desde 0
+      if (prevIndex === null) {
+        return 0;
+      }
+      const nextIndex = (prevIndex + 1) % playlistAux.length;
+      return nextIndex;
+    });
+
     setIsPlaying(true);
   };
 
   const handlePreviousSong = () => {
-    const playlistAux = selectedPlaylist ? selectedPlaylist : playlist
+    const playlistAux = (selectedPlaylist && selectedPlaylist.length > 0) ? selectedPlaylist : playlist;
+
+    if (!Array.isArray(playlistAux) || playlistAux.length === 0) {
+      return;
+    }
+
     setCurrentSongIndex((prevIndex) => {
+      if (prevIndex === null) {
+        return playlistAux.length - 1;
+      }
       const prevIndexNormalized = (prevIndex - 1 + playlistAux.length) % playlistAux.length;
       return prevIndexNormalized;
     });
@@ -170,96 +188,72 @@ const SongPlayContextProvider = ({ children }) => {
     await addDoc(refCollection, {
       user_id: user.id,
       name: name,
-      songs: [] // inicializamos la playlist sin canciones
+      songs: []
     });
   };
 
-  const handlePlaylistSelect = async (playlistId) => {
-    if(playlistId === null){
-      setSelectedPlaylist(null)
+  const handlePlaylistSelect = async (playlist) => {
+    if (playlist === null) {
+      setPlaylistName(null);
+      setSelectedPlaylist(null);
       return;
     }
-
+    setPlaylistName(playlist.data.name);
     try {
-      setCurrentSongIndex(null)
-      audioRef.current.pause()
+      setCurrentSongIndex(null);
+      audioRef.current.pause();
       const db = getFirestore();
   
-      // Referencia al documento de la playlist
-      const playlistRef = doc(db, "playlists", playlistId);
+      const playlistRef = doc(db, "playlists", playlist.id);
       const playlistSnap = await getDoc(playlistRef);
   
       if (!playlistSnap.exists()) {
-        console.warn(`Playlist with ID ${playlistId} does not exist.`);
-        return [];
-      }
-  
-      const playlistData = playlistSnap.data();
-      const songIds = playlistData.songs || [];
-  
-      if (songIds.length === 0) {
-        console.warn(`Playlist with ID ${playlistId} has no songs.`);
-        return [];
-      }
-  
-      // Si hay 10 canciones o menos, consulta directamente
-      if (songIds.length <= 10) {
-        const q = query(collection(db, "songs"), where(documentId(), "in", songIds));
-        const songsSnap = await getDocs(q);
-        const allSongs = songsSnap.docs.map(songDoc => ({ id: songDoc.id, data: songDoc.data() }));
-        setSelectedPlaylist(allSongs)
+        console.warn(`Playlist with ID ${playlist.id} does not exist.`);
+        setSelectedPlaylist([]);
         return;
       }
   
-      // Para más de 10 canciones, dividir en trozos
-      const chunkSize = 10;
-      const promises = [];
-      for (let i = 0; i < songIds.length; i += chunkSize) {
-        const chunk = songIds.slice(i, i + chunkSize);
-        if (chunk.length > 0) { // Verificar que el chunk no esté vacío
-          const q = query(collection(db, "songs"), where(documentId(), "in", chunk));
-          promises.push(getDocs(q));
-        }
+      const playlistData = playlistSnap.data();
+      const songs = playlistData.songs || [];
+  
+      if (songs.length === 0) {
+        console.warn(`Playlist with ID ${playlist.id} has no songs.`);
+        setSelectedPlaylist([]);
+        return;
       }
   
-      // Resolver todas las promesas y aplanar los resultados
-      const snapshots = await Promise.all(promises);
-      const allSongs = snapshots.flatMap(snap =>
-        snap.docs.map(songDoc => ({ id: songDoc.id, data:songDoc.data() }))
-      );
-
-      setSelectedPlaylist(allSongs)
-      return;
+      // Como ahora cada canción ya contiene { id, data: { ... } },
+      // simplemente seteamos la playlist sin consultas adicionales.
+      setSelectedPlaylist(songs);
+  
     } catch (error) {
       console.error("Error fetching playlist songs:", error);
-      return []; // Retornar un array vacío en caso de error
+      setSelectedPlaylist([]);
     }
   };
 
   const handleAddToPlayList = async (songId, item) => {
     if (userPlaylists === null) {
-        return console.error('No hay ninguna playlist.');
+      console.error('No hay ninguna playlist.');
+      return;
     }
 
-    console.log(songId);
-    console.log(item);
+    if (!item.data.songs.find(sId => sId === songId.id)) {
+      const db = getFirestore();
+      const docRef = doc(db, 'playlists', item.id);
 
-    if (!item.data.songs.find(sId => sId === songId)) { // Verifica que el ID no está ya en la playlist
-        const db = getFirestore();
-        const docRef = doc(db, 'playlists', item.id); // Referencia al documento de la playlist
-
-        try {
-            await updateDoc(docRef, {
-                songs: arrayUnion(songId), // Agrega el ID al array `songs` si no existe
-            });
-            alert('Canción agregada a la playlist con éxito.');
-        } catch (error) {
-            console.error('Error al agregar la canción a la playlist:', error);
-        }
+      try {
+        await updateDoc(docRef, {
+          songs: arrayUnion(songId),
+        });
+        alert('Canción agregada a la playlist con éxito.');
+      } catch (error) {
+        console.error('Error al agregar la canción a la playlist:', error);
+      }
     } else {
-        alert('La canción ya está en la playlist.');
+      alert('La canción ya está en la playlist.');
     }
-};
+  };
 
   const contextValue = {
     playlist,
@@ -282,7 +276,8 @@ const SongPlayContextProvider = ({ children }) => {
     isLoadingPlaylists,
     selectedPlaylist,
     handlePlaylistSelect,
-    handleAddToPlayList
+    handleAddToPlayList,
+    playlistName
   };
 
   return (

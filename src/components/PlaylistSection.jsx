@@ -1,31 +1,35 @@
+// components/PlaylistSection.js
 import React, { useContext } from 'react';
 import { SongPlayContext } from '../context/SongPlayContext';
 import PlayBar from './PlayBar';
+import UserPlaylistsSidebar from './UserPlaylistsSidebar';
+import { SongItem } from './SongItem';
 
 const PlaylistSection = () => {
-    const {playlist, handleSongSelect, searchTerm, currentSongIndex} = useContext(SongPlayContext);
+    const { playlist, searchTerm, currentSongIndex, selectedPlaylist } = useContext(SongPlayContext);
     const filteredPlaylist = playlist.filter(song =>
-        song.name && song.name.toLowerCase().includes(searchTerm || "")
+        song.data.name && song.data.name.toLowerCase().includes(searchTerm || "")
     );
-    return (
-        playlist.length ? (
-            <section className="playlist">
-            <h2>Player</h2>
-            <ul className="song-ul">
-                {playlist.map((song, index) => (
-                    <li key={song.id} className="song" onClick={() => handleSongSelect(index)}>
-                        <figure>
-                            <img src={song.data.img} alt={song.data.name} />
-                        </figure>
-                        <h3>{song.data.name}</h3>
-                    </li>
-                ))}
-            </ul>
-            {currentSongIndex !== null ? <PlayBar/> : ''}
-            
-        </section>
-        ) : ('')
 
+    return (
+        <div className="playlist-container" style={{ display: 'flex' }}>
+            <UserPlaylistsSidebar />
+            
+            {playlist.length > 0 && (
+                <section className="playlist">
+                    <h2>Player</h2>
+                    <ul className="song-ul">
+                        {selectedPlaylist? (
+                            selectedPlaylist.map((song, index) => <SongItem song={song} index={index} key={song.id}/>)
+                        ) : 
+                        (
+                            filteredPlaylist.map((song, index) => (<SongItem song={song} index={index} key={song.id}/>
+                        )))}
+                    </ul>
+                    {currentSongIndex !== null && <PlayBar />}
+                </section>
+            )}
+        </div>
     );
 };
 

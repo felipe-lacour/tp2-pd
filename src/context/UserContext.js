@@ -84,7 +84,7 @@ const handleLoginWithEmail = async () => {
     setError('Error iniciando sesión: ' + err.message);
   }
 };
-  const value = [
+  const value = {
     user,
     loginWithGoogle,
     logoutUser,
@@ -100,7 +100,7 @@ const handleLoginWithEmail = async () => {
     handleRegister,
     handleLoginWithEmail,
     setIsRegistering
-  ]
+  }
 
   return (
     <UserContext.Provider value={value}>

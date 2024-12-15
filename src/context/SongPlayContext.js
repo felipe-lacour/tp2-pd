@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useRef, useContext } from "react";
 import { UserContext } from "./UserContext";
 import { useSongs } from "../customHooks/useSongs";
 import { usePlaylists } from "../customHooks/usePlaylists";
-import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, documentId, updateDoc, arrayUnion } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
 const SongPlayContext = createContext();
 
@@ -48,7 +48,7 @@ const SongPlayContextProvider = ({ children }) => {
       console.log('User Playlists', userPlaylists)
       setIsLoadingPlaylist(false);
     }
-  }, [newUserPlaylists]);
+  }, [newUserPlaylists, userPlaylists]);
 
   // Actualiza playlist solo si newSongs es válido (array con datos)
   useEffect(() => {
@@ -80,6 +80,7 @@ const SongPlayContextProvider = ({ children }) => {
     return () => {
       audioElement.removeEventListener("loadeddata", handleLoadedData);
     };
+    // eslint-disable-next-line
   }, [song]);
 
   useEffect(() => {
@@ -114,6 +115,7 @@ const SongPlayContextProvider = ({ children }) => {
       audioElement.removeEventListener("timeupdate", handleTimeUpdate);
       audioElement.removeEventListener("ended", handleEnded);
     };
+    // eslint-disable-next-line
   }, [playlist, selectedPlaylist]);
 
   const togglePlay = () => {

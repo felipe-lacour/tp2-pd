@@ -2,11 +2,18 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase'; // Asegúrate que en este archivo solo exportes auth desde getAuth(app)
-
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [error, setError] = useState('');
+
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -51,8 +58,52 @@ export const UserContextProvider = ({ children }) => {
     }
 };
 
+const handleRegister = async () => {
+  if (password !== confirmPassword) {
+    setError('Las contraseñas no coinciden.');
+    return;
+  }
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setError('');
+  } catch (err) {
+    setError('Error registrando usuario: ' + err.message);
+  }
+};
+
+const handleLoginWithEmail = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    setEmail('');
+    setPassword('');
+    setError('');
+  } catch (err) {
+    setError('Error iniciando sesión: ' + err.message);
+  }
+};
+  const value = {
+    user,
+    loginWithGoogle,
+    logoutUser,
+    handleAuthAction,
+    isRegistering,
+    error,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    handleRegister,
+    handleLoginWithEmail,
+    setIsRegistering
+  }
+
   return (
-    <UserContext.Provider value={{ user, loginWithGoogle, logoutUser, handleAuthAction }}>
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );

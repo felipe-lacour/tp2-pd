@@ -33,15 +33,15 @@ const UserPlaylistsSidebar = () => {
 
   return (
     <aside className="sidebar">
-      <h3>Tus Playlists</h3>
+      <h3>Library</h3>
 
       {isLoadingPlaylists ? (
         <p>Cargando...</p>
       ) : userPlaylists && userPlaylists.length > 0 ? (
         <ul>
-          <li onClick={() => handlePlaylistSelect(null)}>Home</li>
+          <li className="side-button" onClick={() => handlePlaylistSelect(null)}>Home</li>
           {userPlaylists.map((pl) => (
-            <li key={pl.id} onClick={() => handlePlaylistSelect(pl)}>{pl.data.name}</li>
+            <li className="side-button" key={pl.id} onClick={() => handlePlaylistSelect(pl)}>{pl.data.name}</li>
           ))}
         </ul>
       ) : (
@@ -49,11 +49,11 @@ const UserPlaylistsSidebar = () => {
           <p>No tienes ninguna playlist aún.</p>
         </div>
       )}
-      <button onClick={handleCreatePlaylistClick}>Crear una nueva playlist</button>
+      <button className="side-button" onClick={handleCreatePlaylistClick}>Crear playlist</button>
       {showPopup && (
         <div className="popup">
           <div className="popup-content">
-            <h4>Crea una nueva playlist</h4>
+            <h4>Crea playlist</h4>
             <input
               type="text"
               value={newPlaylistName}

@@ -36,7 +36,7 @@ const SongItem = ({ song, index }) => {
                 +
             </button>
             {isAdding && (
-                <div ref={popupRef}>
+                <div ref={popupRef} className="song-popup">
                     <PlAddPopUp song={song} />
                 </div>
             )}

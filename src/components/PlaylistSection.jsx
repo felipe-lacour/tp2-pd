@@ -11,7 +11,7 @@ const PlaylistSection = () => {
         song.data.name && song.data.name.toLowerCase().includes(searchTerm || "")
     );
     return (
-        <div className="playlist-container" style={{ display: 'flex' }}>
+        <div className="playlist-container">
             <UserPlaylistsSidebar />
             
             {playlist?.length > 0 && (

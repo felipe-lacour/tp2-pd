@@ -40,6 +40,8 @@ body {
     text-decoration: none;
     font-size: 1.1rem;
     transition: color 0.2s ease;
+    background-color: #282828;
+    border: none;
 }
 
 .nav-link:hover {
@@ -62,6 +64,35 @@ body {
 .playlist {
     padding: 2rem;
     margin-bottom: 5rem;
+    width: 100%;
+}
+
+.playlist-container {
+    display: flex;
+    height: 88vh;
+    overflow: auto;
+    z-index: 1;
+    
+}
+
+.sidebar {
+    padding: 2rem;
+    background-color: #181818;
+    position: sticky;
+    top: 0;
+    width: 14%;
+    z-index: 3;
+}
+
+.sidebar h3 {
+    font-size: 1.80rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar ul {
+    padding: 0;
+    padding-right: 7.5%;
+
 }
 
 .playlist h2 {
@@ -76,7 +107,6 @@ body {
     position: relative;
     transition: background-color 0.15s;
     border-radius: 15px;
-    overflow: hidden;
 }
 
 .song::after {
@@ -104,7 +134,6 @@ body {
     aspect-ratio: 1/1;
 }
 
-
 .song img {
     width: 100%;
     height: auto;
@@ -128,6 +157,25 @@ body {
     background-color: #282828;
     padding: 0.5rem 1rem;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 4;
+}
+
+.side-button {
+    margin: 0.75rem 0;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: relative;
+    transition: background-color 0.15s;
+    border-radius: 15px;
+    overflow: hidden;
+    width: 100%;
+    border: none;
+    text-overflow: ellipsis;
+}
+
+.side-button:hover{
+    background-color: #1db954;
+    border-radius: 15px;
 }
 
 .barra img.img-barra {
@@ -185,3 +233,135 @@ body {
 .control-button:hover .icon {
     filter: brightness(1.2);
 }
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.popup-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.popup-content h4 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.popup-content input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.popup-actions button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-actions button:first-of-type {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.popup-actions button:first-of-type:hover {
+  background-color: #45a049;
+}
+
+.popup-actions button:last-of-type {
+  background-color: #f44336;
+  color: white;
+}
+
+.popup-actions button:last-of-type:hover {
+  background-color: #d32f2f;
+}
+
+.song button {
+    background-color: white;
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 1.5rem; 
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 1rem;
+
+}
+
+.song button:hover {
+    background-color: #333;
+    color: #1db954;
+}
+
+.song-popup {
+    position: absolute;
+    top: 6%; 
+    right: 7%;
+    background-color: #282828; /* Fondo oscuro */
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    z-index: 3; /* Muy alto para evitar problemas */
+    min-width: 200px; /* Ancho mínimo */
+    margin-left: auto;
+}
+
+/* Lista de playlists */
+.song-popup ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Elementos de la lista */
+.song-popup ul li {
+    padding: 0.5rem 1rem;
+    color: #dddddd;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s ease;
+    border-radius: 4px;
+}
+
+/* Efecto hover */
+.song-popup ul li:hover {
+    background-color: #1db954;
+    color: #fff;
+}
+
+

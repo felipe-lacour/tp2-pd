@@ -1,17 +1,12 @@
 import React, { useContext } from 'react';
 import { SongPlayContext } from '../context/SongPlayContext';
 import ProgressBar from './ProgressBar';
+import { PlayerContext } from '../context/PlayerContext';
 
 
 const PlayBar = () => {
-	const { 
-		handleNextSong, 
-		handlePreviousSong, 
-		song, 
-		togglePlay, 
-		isPlaying
-	} = useContext(SongPlayContext)
-
+	const {	handleNextSong, handlePreviousSong, togglePlay, isPlaying  } = useContext(PlayerContext);
+	const { song } = useContext(SongPlayContext)
 	return (
 		<div className="barra">
 		<img src={song.data.img} alt="Current Song" className="img-barra" />

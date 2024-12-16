@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import { SongPlayContext } from "../context/SongPlayContext";
+import { PlayerContext } from "../context/PlayerContext";
 
 const ProgressBar = () => {
     const {
@@ -8,7 +9,7 @@ const ProgressBar = () => {
 		progress, 
 		duration,
         formatTime
-    } = useContext(SongPlayContext)
+    } = useContext(PlayerContext)
 
     return(
         <>

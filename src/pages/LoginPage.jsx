@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import "./LoginPage.css"
 
 
 const LoginPage = () => {
@@ -27,56 +28,56 @@ const LoginPage = () => {
 
 
   return (
-    <div style={{ margin: '50px' }}>
+    <div className='loginpage'>
+      {error && <p>{error}</p>}
+      <div className='loginpage-div'>
       <h2>{isRegistering ? 'Registro' : 'Iniciar Sesión'}</h2>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      <div style={{ marginBottom: '10px' }}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      {isRegistering && (
-        <div style={{ marginBottom: '10px' }}>
-          <input
-            type="password"
-            placeholder="Confirmar Contraseña"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
+        <form action="/player">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          {isRegistering && (
+              <input
+                type="password"
+                placeholder="Confirmar Contraseña"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+          )}
+            {isRegistering ? (
+              <button type='submit' onClick={(e) => {
+                e.preventDefault()
+                handleRegister()
+              }}>Registrar</button>
+            ) : (
+              <button type='submit' onClick={(e) => {
+                e.preventDefault()
+                handleLoginWithEmail()
+              }}>Iniciar Sesión</button>
+            )}
+        </form>
+        <div>
+          <button onClick={loginWithGoogle} className='google-button'>
+            <img src="/res/img/google.svg" alt="google" />
+            Login con Google
+          </button>
         </div>
-      )}
-
-      <div style={{ marginBottom: '10px' }}>
-        {isRegistering ? (
-          <button onClick={handleRegister}>Registrar</button>
-        ) : (
-          <button onClick={handleLoginWithEmail}>Iniciar Sesión</button>
-        )}
+        <button onClick={() => setIsRegistering(!isRegistering)} className='register-button'>
+          {isRegistering ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}
+        </button>
       </div>
-
-      <div style={{ marginBottom: '10px' }}>
-        <button onClick={loginWithGoogle}>Login con Google</button>
-      </div>
-
-      <button onClick={() => setIsRegistering(!isRegistering)}>
-        {isRegistering ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}
-      </button>
     </div>
   );
 };

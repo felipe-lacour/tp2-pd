@@ -306,6 +306,12 @@ body {
   background-color: #d32f2f;
 }
 
+.song-buttons{
+    margin-left: auto;
+    margin-right: 1rem;
+    display: flex;
+    gap: 1rem;
+}
 .song button {
     background-color: white;
     color: #333;
@@ -319,9 +325,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: auto;
-    margin-right: 1rem;
-
 }
 
 .song button:hover {
@@ -332,7 +335,7 @@ body {
 .song-popup {
     position: absolute;
     top: 6%; 
-    right: 7%;
+    right: 9%;
     background-color: #282828; /* Fondo oscuro */
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);

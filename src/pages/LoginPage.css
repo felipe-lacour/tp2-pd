@@ -1,0 +1,62 @@
+.loginpage-div {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 33%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 20%;
+  text-align: center;
+}
+
+.loginpage-div input {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4rem;
+  border: 1px solid #1db954;
+  background-color: #282828;
+  color: #1db954;
+}
+
+.loginpage-div form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Cambiado a stretch */
+  gap: 0.75rem;
+  margin: 0 0 1rem 0;
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
+}
+
+.loginpage-div form button {
+  background-color: #1db954;
+  color: #282828;
+  height: 2.5rem;
+  border-radius: 4rem;
+  border: none;
+  cursor: pointer;
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
+}
+
+.google-button {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 2.5rem;
+  padding: 0 1.5rem; /* Reducir padding si es necesario */
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
+  box-sizing: border-box; /* Incluye padding dentro del ancho total */
+  border: 0;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+}
+
+.register-button {
+  background-color: transparent;
+  color: #1db954;
+  border: none;
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
+  text-align: center;
+  padding: 0.5rem 0;
+}

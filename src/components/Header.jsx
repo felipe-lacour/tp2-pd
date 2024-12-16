@@ -15,7 +15,7 @@ const Header = () => {
             <h1 className="logo">Sputify</h1>
 
             <div className="navegamo">        
-                {location.pathname === '/player' && (
+                {location.pathname === '/player' &&(
                     <input
                         type="text"
                         className="search"

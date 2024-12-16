@@ -4,12 +4,17 @@ import { SongPlayContext } from '../context/SongPlayContext';
 import PlayBar from './PlayBar';
 import UserPlaylistsSidebar from './UserPlaylistsSidebar';
 import { SongItem } from './SongItem';
+import { PlaylistContext } from '../context/PlaylistContext';
+import { SharedContext } from '../context/SharedContext';
 
 const PlaylistSection = () => {
-    const { playlist, searchTerm, currentSongIndex, selectedPlaylist, playlistName } = useContext(SongPlayContext);
+    const {currentSongIndex, selectedPlaylist, playlist} = useContext(SharedContext);
+    const {searchTerm} = useContext(SongPlayContext);
+    const {playlistName} = useContext(PlaylistContext)
     const filteredPlaylist = playlist?.filter(song =>
         song.data.name && song.data.name.toLowerCase().includes(searchTerm || "")
     );
+
     return (
         <div className="playlist-container">
             <UserPlaylistsSidebar />
@@ -19,11 +24,22 @@ const PlaylistSection = () => {
                     <h2>{playlistName !== null ? playlistName : "Home"}</h2>
                     <ul className="song-ul">
                         {selectedPlaylist? (
-                            selectedPlaylist.map((song, index) => <SongItem song={song} index={index} key={song.id}/>)
+                            selectedPlaylist.data.songs.map((song, index) => {
+                                return <SongItem
+                                            key={song.id}
+                                            song={song}
+                                            index={index}
+                                        />
+                            })
                         ) : 
                         (
-                            filteredPlaylist.map((song, index) => (<SongItem song={song} index={index} key={song.id}/>
-                        )))}
+                            filteredPlaylist.map((song, index) => {
+                                return  <SongItem
+                                            key={song.id}
+                                            song={song}
+                                            index={index}
+                                        />
+                            }))}
                     </ul>
                     {currentSongIndex !== null && <PlayBar />}
                 </section>

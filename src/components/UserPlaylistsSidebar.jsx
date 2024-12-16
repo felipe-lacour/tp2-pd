@@ -2,10 +2,12 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { SongPlayContext } from '../context/SongPlayContext';
+import { v4 as uuidv4 } from 'uuid';
+import { PlaylistContext } from '../context/PlaylistContext';
 
 const UserPlaylistsSidebar = () => {
   const { user } = useContext(UserContext);
-  const { userPlaylists, createPlaylist, isLoadingPlaylists, handlePlaylistSelect } = useContext(SongPlayContext);
+  const { userPlaylists, createPlaylist, isLoadingPlaylists, handlePlaylistSelect } = useContext(PlaylistContext);
 
   const [showPopup, setShowPopup] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState("");
@@ -40,9 +42,9 @@ const UserPlaylistsSidebar = () => {
       ) : userPlaylists && userPlaylists.length > 0 ? (
         <ul>
           <li className="side-button" onClick={() => handlePlaylistSelect(null)}>Home</li>
-          {userPlaylists.map((pl) => (
-            <li className="side-button" key={pl.id} onClick={() => handlePlaylistSelect(pl)}>{pl.data.name}</li>
-          ))}
+          {userPlaylists.map((pl) => {
+            return <li className="side-button" key={pl.id} onClick={() => handlePlaylistSelect(pl)}>{pl.data.name}</li>
+          })}
         </ul>
       ) : (
         <div>
